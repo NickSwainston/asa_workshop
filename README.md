@@ -14,7 +14,7 @@ pip install .
 
 To run the simple hello world script use the following command:
 
-```
+```bash
 hello_world
 ```
 
