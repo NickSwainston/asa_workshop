@@ -12,9 +12,10 @@ NSRC = 1_000
 def clip_to_radius(ra, dec, ras, decs):
     output_ras = []
     output_decs = []
-    if ra**2 + dec**2 < 1:
-        output_ras.append(ra)
-        output_decs.append(dec)
+    for ra_i, dec_i in zip(ras, decs):
+        if ra_i**2 + dec_i**2 < 1:
+            output_ras.append(ra_i)
+            output_decs.append(dec_i)
     return output_ras, output_decs
 
 
