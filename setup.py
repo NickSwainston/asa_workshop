@@ -27,7 +27,7 @@ setup(
     entry_points={
         'console_scripts':[
             'hello_world=mymodule.submod1:hello_world',
-            'sky_sim=mymodule.sky_sim:generate_sky_pos',
+            'sky_sim=mymodule.sky_sim:main',
         ]
     }
 )
