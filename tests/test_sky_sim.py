@@ -39,3 +39,5 @@ def test_segadecimal_to_float(ra, dec):
 # ])
 # def test_magic_function(input, output):
 #     assert magic(input) == output
+
+# Dummy change for test branch
