@@ -11,6 +11,7 @@ NSRC = 1_000
 RA = '00:42:44.3'
 DEC = '41:16:09'
 
+
 def get_radec():
     """
     Generate the ra/dec coordinates of Andromeda
@@ -35,39 +36,6 @@ def get_radec():
     ra = ra/cos(dec*pi/180)
     return ra,dec
 
-def clip_to_radius(ra, dec, ras, decs):
-    output_ras = []
-    output_decs = []
-    for ra_i, dec_i in zip(ras, decs):
-        if ra_i**2 + dec_i**2 < 1:
-            output_ras.append(ra_i)
-            output_decs.append(dec_i)
-    return output_ras, output_decs
-
-
-def generate_sky_pos():
-    # from wikipedia
-    ra = '00:42:44.3'
-    dec = '41:16:09'
-
-    # convert to decimal degrees
-
-    d, m, s = dec.split(':')
-    dec = int(d)+int(m)/60+float(s)/3600
-
-    h, m, s = ra.split(':')
-    ra = 15*(int(h)+int(m)/60+float(s)/3600)
-    ra = ra/cos(dec*pi/180)
-
-
-    # make 1000 stars within 1 degree of Andromeda
-    ras = []
-    decs = []
-    for i in range(NSRC):
-        ras.append(ra + uniform(-1,1))
-        decs.append(dec + uniform(-1,1))
-    return ras, decs
-
 
 def make_stars(ra, dec, nsrc=NSRC):
     """
@@ -88,19 +56,29 @@ def make_stars(ra, dec, nsrc=NSRC):
     ras = []
     decs = []
     for _ in range(nsrc):
-        ras.append(ra + random.uniform(-1,1))
-        decs.append(dec + random.uniform(-1,1))
+        ras.append(ra + uniform(-1,1))
+        decs.append(dec + uniform(-1,1))
     return ras, decs
+
+
+def clip_to_radius(ra, dec, ras, decs):
+    output_ras = []
+    output_decs = []
+    for ra_i, dec_i in zip(ras, decs):
+        if (ra_i - ra)**2 + (dec_i - dec)**2 < 1:
+            output_ras.append(ra_i)
+            output_decs.append(dec_i)
+    return output_ras, output_decs
 
 
 def main():
     ra_deg, dec_deg = get_radec()
-    ras, decs = generate_sky_pos()
-    ras, decs = clip_to_radius(ras, decs)
+    ras, decs = make_stars(ra_deg, dec_deg)
+    ras, decs = clip_to_radius(ra_deg, dec_deg, ras, decs)
 
     # now write these to a csv file for use by my other program
     with open('catalog.csv','w') as f:
         print("id,ra,dec", file=f)
-        for i in range(NSRC):
+        for i in range(len(ras)):
             print(f"{i:07d}, {ras[i]:12f}, {decs[i]:12f}", file=f)
 
