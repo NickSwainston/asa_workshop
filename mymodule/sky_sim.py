@@ -6,6 +6,7 @@ Determine Andromeda location in ra/dec degrees
 import argparse
 from random import uniform
 from math import cos, sin, pi
+import logging
 
 import mymodule
 
@@ -31,6 +32,8 @@ def skysim_parser():
                         help="Central dec (degrees) for the simulation location")
     parser.add_argument('--out', dest='out', type=str, default='catalog.csv',
                         help='destination for the output catalog')
+    parser.add_argument('--logging', type=str, default=logging.INFO,
+                        help='Logging level from (DEBUG, INFO, WARNING, ERROR, CRITICAL)')
     return parser
 
 
@@ -85,6 +88,15 @@ def clip_to_radius(ra, dec, ras, decs):
 def main():
     parser = skysim_parser()
     options = parser.parse_args()
+    loglevels = {
+        'DEBUG': logging.DEBUG,
+        'INFO': logging.INFO,
+        'WARNING': logging.WARNING,
+        'ERROR': logging.ERROR,
+        'CRITICAL': logging.CRITICAL
+    }
+    logging.basicConfig(format="%(name)s:%(levelname)s %(message)s", level=loglevels[options.logging])
+    log = logging.getLogger("<my module>")
 
     # if ra/dec are not supplied the use a default value
     if None in [options.ra, options.dec]:
