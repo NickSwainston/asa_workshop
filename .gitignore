@@ -1,4 +1,7 @@
 build/
 dist/
+html/
 *__pycache__/
 *egg-info/
+.vscode/
+.coverage
